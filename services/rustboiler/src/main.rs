@@ -5,7 +5,7 @@
 
 #[get("/")]
 fn root() -> &'static str {
-    "Hello World"
+    "Hello World!"
 }
 
 fn main() {

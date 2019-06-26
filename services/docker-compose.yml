@@ -12,6 +12,4 @@ services:
   # ------ Sessions service ------
   rustboiler:
     build: ./rustboiler
-    #volumes:
-    #  - ./rustboiler/src:/usr/src/app
     restart: on-failure
