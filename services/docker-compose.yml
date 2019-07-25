@@ -8,8 +8,36 @@ services:
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - rustboiler
-  # ------ Sessions service ------
-  rustboiler:
-    build: ./rustboiler
+      - web
+      - cherrypyboiler
+  # ------ Web application interface ------
+  web:
+    build: ./web
+    volumes:
+      - ./web/build:/usr/share/nginx/html
+  # ------ Sensor data DB -------
+  db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - "27017:27017"
+  # ------ Chertypy test ---------
+  cherrypyboiler:
+    build: ./cherrypyboiler
+    volumes:
+      - ./cherrypyboiler:/usr/src/app
+    environment:
+      - TELEMETRIC=temperature
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=example
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
     restart: on-failure
+  # ------ Sessions service ------
+  #rustboiler:
+  #  build: ./rustboiler
+  #  restart: on-failure
